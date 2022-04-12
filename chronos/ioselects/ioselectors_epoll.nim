@@ -13,9 +13,8 @@
 
 import std/[posix, times, epoll]
 import stew/results
-import ../handles
 
-export results, times
+export results
 
 # Maximum number of events that can be returned
 const MAX_EPOLL_EVENTS = 64
@@ -318,7 +317,8 @@ proc registerTimer*[T](s: Selector[T], timeout: int, oneshot: bool,
 
 when not defined(android):
   proc registerSignal*[T](s: Selector[T], signal: int,
-                          data: T): Result[int, OSError] {.raises: [Defect].} =
+                          data: T): Result[int, OSErrorCode] {.
+       raises: [Defect].} =
     var
       nmask: Sigset
       omask: Sigset
@@ -350,7 +350,8 @@ when not defined(android):
     ok(fdi)
 
   proc registerProcess*[T](s: Selector, pid: int,
-                           data: T): Result[int, OSError] {.raises: [Defect].} =
+                           data: T): Result[int, OSErrorCode] {.
+       raises: [Defect].} =
     var
       nmask: Sigset
       omask: Sigset
