@@ -10,10 +10,10 @@
 {.push raises: [Defect].}
 
 import std/[net, nativesockets]
-import stew/base10
 import "."/[asyncloop, osdefs]
 
 when defined(windows) or defined(nimdoc):
+  import stew/base10
   const
     asyncInvalidSocket* = AsyncFD(-1)
     PipeHeaderName = r"\\.\pipe\LOCAL\chronos\"
