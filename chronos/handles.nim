@@ -139,7 +139,7 @@ proc createAsyncSocket*(domain: Domain, sockType: SockType,
       except CatchableError:
         discard osdefs.close(fd)
         return asyncInvalidSocket
-      AsyncFD(handle)
+      AsyncFD(fd)
 
 proc wrapAsyncSocket*(sock: SocketHandle): AsyncFD {.
      raises: [Defect].} =
