@@ -135,7 +135,7 @@ proc createAsyncSocket*(domain: Domain, sockType: SockType,
         discard osdefs.close(fd)
         return asyncInvalidSocket
       try:
-        register(AsyncFD(handle))
+        register(AsyncFD(fd))
       except CatchableError:
         discard osdefs.close(fd)
         return asyncInvalidSocket
