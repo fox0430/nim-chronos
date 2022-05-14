@@ -71,7 +71,8 @@ proc new*(t: typedesc[SelectEvent]): SelectResult[SelectEvent] =
 
 proc trigger2*(event: SelectEvent): SelectResult[void] =
   var data: uint64 = 1
-  let res = handleEintr(osdefs.write(event.efd, addr data, sizeof(uint64)))
+  let res = handleEintr(osdefs.write(cint(event.efd), addr data,
+                                     sizeof(uint64)))
   if res == -1:
     err(osLastError())
   elif res != sizeof(uint64):
@@ -145,7 +146,7 @@ proc unregister2*[T](s: Selector[T], fd: cint): SelectResult[void] =
   doAssert(pkey.ident != InvalidIdent,
            "Descriptor " & $fdi & " is not registered in the selector!")
   if pkey.events != {}:
-    if {Event.Read, Event.Write, Event.User} * pkey.events) != {}:
+    if {Event.Read, Event.Write, Event.User} * pkey.events != {}:
       if epoll_ctl(s.epollFD, EPOLL_CTL_DEL, fd, nil) != 0:
         return err(osLastError())
       dec(s.count)
@@ -323,7 +324,7 @@ proc selectInto2*[T](s: Selector[T], timeout: int,
   let
     maxEventsCount = cint(min(asyncEventsCount, len(readyKeys)))
     eventsCount = handleEintr(epoll_wait(s.epollFD, addr(queueEvents[0]),
-                                         maxEventsCount, cint(timeout))
+                                         maxEventsCount, cint(timeout)))
   if eventsCount < 0:
     return err(osLastError())
 
