@@ -10,7 +10,7 @@
 {.push raises: [Defect].}
 
 import std/deques
-import ".."/[asyncloop, handles, osdefs, selectors2]
+import ".."/[asyncloop, handles, osdefs, osutils, selectors2]
 import common
 
 type
